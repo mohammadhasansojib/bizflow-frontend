@@ -1,15 +1,9 @@
 "use client";
 
-import { apiFetch } from "@/lib/api";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
 
-interface ILogoutApiResponse {
-    success: boolean
-    message: string
-    statusCode: number
-    data: unknown
-}
+import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import { logoutUser } from "@/app/(auth)/_actions/actions";
 
 
 const LogoutButton = () => {
@@ -18,21 +12,10 @@ const LogoutButton = () => {
     const handleClick = async () => {
 
         try {
-            const apiResponse = await apiFetch("/auth/logout", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    
-                },
-            });
+            
+            await logoutUser();
+            router.push("/login");
 
-            const response: ILogoutApiResponse = await apiResponse.json();
-            if (response.success) {
-                router.push("/login");
-            }
-            console.log(response);
-
-            return response;
         } catch (error) {
             console.log(error);
         }
